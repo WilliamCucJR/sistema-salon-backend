@@ -1,16 +1,20 @@
+require('dotenv').config();
 const express = require('express');
+const supplierRoutes = require('./routes/supplierRoutes');
+
 const app = express();
 const port = 3000;
 
-// Middleware para parsear el cuerpo de las solicitudes en formato JSON
 app.use(express.json());
 
-// Ruta de ejemplo
+app.use('/api', supplierRoutes);
+
 app.get('/', (req, res) => {
   res.send('¡Hola, mundo!');
 });
 
-// Inicia el servidor
-app.listen(port, () => {
-  console.log(`Servidor escuchando en http://localhost:${port}`);
-});
+if (require.main === module) {
+  app.listen(port, () => {
+    console.log(`Servidor escuchando en http://localhost:${port}`);
+  });
+}
