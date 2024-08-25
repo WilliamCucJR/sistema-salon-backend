@@ -1,9 +1,10 @@
 const Database = require('../data/Database');
 
 class CatalogueService {
-    constructor(tableName) {
+    constructor(tableName, idField) {
         this.db = new Database();
         this.tableName = tableName;
+        this.idField = idField;
     }
 
     async getAll() {
@@ -16,9 +17,10 @@ class CatalogueService {
     }
 
     async getById(id) {
-        const sql = `SELECT * FROM ${this.tableName} WHERE id = ?`;
+        const sql = `SELECT * FROM ${this.tableName} WHERE ${this.idField} = ?`;
+        const values = [id];
         try {
-            return await this.db.query(sql, [id]);
+            return await this.db.query(sql, values);
         } catch (err) {
             throw new Error('Error al obtener el registro: ' + err.message);
         }
@@ -34,18 +36,20 @@ class CatalogueService {
     }
 
     async update(id, data) {
-        const sql = `UPDATE ${this.tableName} SET ? WHERE id = ?`;
+        const sql = `UPDATE ${this.tableName} SET ? WHERE ${this.idField} = ?`;
+        const values = [data, id];
         try {
-            return await this.db.query(sql, [data, id]);
+            return await this.db.query(sql, values);
         } catch (err) {
             throw new Error('Error al actualizar el registro: ' + err.message);
         }
     }
 
     async delete(id) {
-        const sql = `DELETE FROM ${this.tableName} WHERE id = ?`;
+        const sql = `DELETE FROM ${this.tableName} WHERE ${this.idField} = ?`;
+        const values = [id];
         try {
-            return await this.db.query(sql, [id]);
+            return await this.db.query(sql, values);
         } catch (err) {
             throw new Error('Error al eliminar el registro: ' + err.message);
         }

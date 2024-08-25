@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const supplierRoutes = require('./routes/supplierRoutes');
+const employeeRoutes = require('./routes/employeeRoutes');
 
 const app = express();
 const port = 3000;
@@ -8,6 +9,7 @@ const port = 3000;
 app.use(express.json());
 
 app.use('/api', supplierRoutes);
+app.use('/api', employeeRoutes);
 
 app.get('/', (req, res) => {
   res.send('¡Hola, mundo!');

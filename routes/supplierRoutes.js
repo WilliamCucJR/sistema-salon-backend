@@ -1,9 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const SupplierController = require('../controllers/SupplierController');
+const supplierController = require('../controllers/supplierController');
 
-const supplierController = new SupplierController();
-
-router.get('/suppliers', (req, res) => supplierController.getSuppliers(req, res));
+router.get('/suppliers', supplierController.getAllSuppliers);
+router.get('/suppliers/:id', supplierController.getSupplierById);
+router.post('/suppliers', supplierController.createSupplier);
+router.put('/suppliers/:id', supplierController.updateSupplier);
+router.delete('/suppliers/:id', supplierController.deleteSupplier);
 
 module.exports = router;
