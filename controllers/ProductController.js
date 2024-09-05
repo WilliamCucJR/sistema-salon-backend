@@ -1,5 +1,24 @@
+const fs = require('fs');
+const multer = require('multer');
+const path = require('path');
 const ProductService = require('../services/ProductService');
 const productService = new ProductService();
+
+const uploadDir = '../uploads';
+if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir, { recursive: true });
+}
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads/');
+    },
+    filename: (req, file, cb) => {
+        cb(null, `${Date.now()}-${file.originalname}`);
+    }
+});
+
+const upload = multer({ storage: storage });
 
 exports.getAllProducts = async (req, res) => {
     try {
@@ -22,26 +41,40 @@ exports.getProductById = async (req, res) => {
     }
 };
 
-exports.createProduct = async (req, res) => {
-    try {
-        const newProduct = await productService.create(req.body);
-        res.status(201).json(newProduct);
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
-};
-
-exports.updateProduct = async (req, res) => {
-    try {
-        const updatedProduct = await productService.update(req.params.id, req.body);
-        if (!updatedProduct) {
-            return res.status(404).json({ error: 'Producto no encontrado' });
+exports.createProduct = [
+    upload.single('PRO_IMAGEN'),
+    async (req, res) => {
+        try {
+            const productData = req.body;
+            if (req.file) {
+                productData.PRO_IMAGEN = req.file.path;
+            }
+            const newProduct = await productService.create(productData);
+            res.status(201).json(newProduct);
+        } catch (err) {
+            res.status(500).json({ error: err.message });
         }
-        res.json({ message: 'Producto actualizado correctamente' });
-    } catch (err) {
-        res.status(500).json({ error: err.message });
     }
-};
+];
+
+exports.updateProduct = [
+    upload.single('PRO_IMAGEN'),
+    async (req, res) => {
+        try {
+            const productData = req.body;
+            if (req.file) {
+                productData.PRO_IMAGEN = req.file.path;
+            }
+            const updatedProduct = await productService.update(req.params.id, productData);
+            if (!updatedProduct) {
+                return res.status(404).json({ error: 'Producto no encontrado' });
+            }
+            res.json({ message: 'Producto actualizado correctamente' });
+        } catch (err) {
+            res.status(500).json({ error: err.message });
+        }
+    }
+];
 
 exports.deleteProduct = async (req, res) => {
     try {
