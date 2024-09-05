@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express');
+const path = require('path');
 const cors = require('cors');
 const supplierRoutes = require('./routes/supplierRoutes');
 const employeeRoutes = require('./routes/employeeRoutes');
@@ -20,6 +21,8 @@ app.use('/api', productRoutes);
 app.use('/api', serviceRoutes);
 app.use('/api', userRoutes);
 app.use('/api', customerRoutes);
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 
 app.get('/', (req, res) => {
   res.send('¡Hola, mundo!');
