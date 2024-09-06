@@ -67,7 +67,7 @@ exports.updateService = [
       }
       const updatedService = await servService.update(
         req.params.id,
-        customerData
+        serviceData
       );
       if (!updatedService) {
         return res.status(404).json({ error: "Servicio no encontrado" });
