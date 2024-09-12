@@ -8,6 +8,7 @@ const productRoutes = require('./routes/productRoutes');
 const serviceRoutes = require('./routes/serviceRoutes');
 const userRoutes = require('./routes/userRoutes')
 const customerRoutes = require('./routes/customerRoutes')
+const loginRoutes = require('./routes/loginRoutes');
 
 const app = express();
 const port = 3000;
@@ -22,6 +23,7 @@ app.use('/api', serviceRoutes);
 app.use('/api', userRoutes);
 app.use('/api', customerRoutes);
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/api', loginRoutes);
 
 
 app.get('/', (req, res) => {
