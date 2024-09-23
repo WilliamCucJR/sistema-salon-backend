@@ -5,7 +5,7 @@ class CartService {
     this.db = new Database();
   }
   async getById(id) {
-    const sql = `SELECT * FROM SDB_ORDER WHERE CUS_ID = ?`;
+    const sql = `SELECT a.*, b.PRO_IMAGEN, b.PRO_NAME, b.PRO_DESCRIPTION FROM SDB_ORDER a INNER JOIN SDB_PRODUCT b ON b.PRO_ID = a.PRO_ID WHERE a.CUS_ID = ?`;
     const values = [id];
     try {
       return await this.db.query(sql, values);
