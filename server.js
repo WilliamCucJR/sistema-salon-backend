@@ -1,16 +1,17 @@
-require('dotenv').config();
-const express = require('express');
-const path = require('path');
-const cors = require('cors');
-const supplierRoutes = require('./routes/supplierRoutes');
-const employeeRoutes = require('./routes/employeeRoutes');
-const productRoutes = require('./routes/productRoutes');
-const serviceRoutes = require('./routes/serviceRoutes');
-const userRoutes = require('./routes/userRoutes')
-const customerRoutes = require('./routes/customerRoutes')
-const loginRoutes = require('./routes/loginRoutes');
-const dateRoutes = require('./routes/dateRoutes');
-const cartRoutes = require('./routes/cartRoutes');
+require("dotenv").config();
+const express = require("express");
+const path = require("path");
+const cors = require("cors");
+const supplierRoutes = require("./routes/supplierRoutes");
+const employeeRoutes = require("./routes/employeeRoutes");
+const productRoutes = require("./routes/productRoutes");
+const serviceRoutes = require("./routes/serviceRoutes");
+const userRoutes = require("./routes/userRoutes");
+const customerRoutes = require("./routes/customerRoutes");
+const loginRoutes = require("./routes/loginRoutes");
+const dateRoutes = require("./routes/dateRoutes");
+const cartRoutes = require("./routes/cartRoutes");
+const reportsRoutes = require("./routes/reportsRoutes");
 
 const app = express();
 const port = 3000;
@@ -18,20 +19,20 @@ const port = 3000;
 app.use(cors());
 app.use(express.json());
 
-app.use('/api', supplierRoutes);
-app.use('/api', employeeRoutes);
-app.use('/api', productRoutes);
-app.use('/api', serviceRoutes);
-app.use('/api', userRoutes);
-app.use('/api', customerRoutes);
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-app.use('/api', loginRoutes);
-app.use('/api', dateRoutes);
-app.use('/api', cartRoutes);
+app.use("/api", supplierRoutes);
+app.use("/api", employeeRoutes);
+app.use("/api", productRoutes);
+app.use("/api", serviceRoutes);
+app.use("/api", userRoutes);
+app.use("/api", customerRoutes);
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+app.use("/api", loginRoutes);
+app.use("/api", dateRoutes);
+app.use("/api", cartRoutes);
+app.use("/api", reportsRoutes);
 
-
-app.get('/', (req, res) => {
-  res.send('¡Hola, mundo!');
+app.get("/", (req, res) => {
+  res.send("¡Hola, mundo!");
 });
 
 if (require.main === module) {
