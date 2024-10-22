@@ -83,9 +83,9 @@ class ReportsService {
 
       case "Servicios":
         sql = `SELECT d.SER_SERVICENAME AS 'SERVICIO', COUNT(a.SER_ID) AS 'VECES UTILIZADO'
-         FROM SDB_DATE a
-         INNER JOIN SDB_SERVICE d ON a.SER_ID = d.SER_ID
-         WHERE 1=1`; // Condición siempre verdadera
+              FROM SDB_DATE a
+              INNER JOIN SDB_SERVICE d ON a.SER_ID = d.SER_ID
+              WHERE 1=1`; 
 
         if (dateFrom && dateFrom !== "") {
           sql += ` AND a.DAT_START >= '${dateFrom}'`;
