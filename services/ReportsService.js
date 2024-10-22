@@ -79,10 +79,9 @@ class ReportsService {
           sql += ` AND a.PRO_ID = ${productOption}`;
         }
         break;
-        case "Productos":
-          sql = `SELECT d.PRO_ID AS "ID PRODUCTO",
-                        d.PRO_NAME AS "PRODUCTO",
-                        SUM(a.ORD_QUANTITY) AS "CANTIDAD VENDIDA",
+      case "Productos":
+          sql = `SELECT d.PRO_ID AS "ID",
+                        d.PRO_NAME AS "PRODUCTO", SUM(a.ORD_QUANTITY) AS "CANTIDAD VENDIDA",
                         COUNT(a.ORD_IDENTIFIER) AS "NUMERO DE ORDENES",
                         CASE
                             WHEN SUM(a.ORD_QUANTITY) IS NULL THEN 'SIN VENTAS'
@@ -99,29 +98,19 @@ class ReportsService {
           if (dateTo) {
               sql += ` AND a.ORD_ORDER_DATE <= '${dateTo}'`;
           }
+          if (productOption) {
+              sql += ` AND d.PRO_ID = ${productOption}`;
+          }
+          
       
           sql += ` GROUP BY d.PRO_ID, d.PRO_NAME`;
       
           if (stateOption == 1) {
-              sql += ` HAVING SUM(a.ORD_QUANTITY) > 0 ORDER BY SUM(a.ORD_QUANTITY) DESC`;
+              sql += ` HAVING SUM(a.ORD_QUANTITY) > 5 ORDER BY SUM(a.ORD_QUANTITY) DESC`;
           } else if (stateOption == 2) {
-              sql += ` HAVING (SUM(a.ORD_QUANTITY) < 3 OR SUM(a.ORD_QUANTITY) IS NULL) ORDER BY SUM(a.ORD_QUANTITY) ASC`;
-          } 
-          
-          else if (productOption) {
-              sql += ` AND d.PRO_ID = ${productOption}`;
+            sql += ` HAVING SUM(a.ORD_QUANTITY) < 6 ORDER BY SUM(a.ORD_QUANTITY) DESC`;
           }
-      
-          console.log(`Valor de stateOption: ${stateOption}`);
-          console.log(`Consulta SQL generada: ${sql}`);
           break;
-
-        
-      
-
-      
-
-
       case "Servicios":
         sql = `SELECT d.SER_SERVICENAME AS 'SERVICIO', COUNT(a.SER_ID) AS 'VECES UTILIZADO'
               FROM SDB_DATE a
@@ -145,6 +134,33 @@ class ReportsService {
         sql += ` LIMIT 10`;
 
         break;
+      case "Clientes":
+          sql = `SELECT c.CUS_ID AS 'ID CLIENTE',
+                        CONCAT(c.CUS_FIRST_NAME, ' ', c.CUS_LAST_NAME) AS 'CLIENTE',
+                        COUNT(o.ORD_IDENTIFIER) AS 'NUMERO DE CITAS'
+                  FROM SDB_CUSTOMER c
+                  INNER JOIN SDB_ORDER o ON c.CUS_ID = o.CUS_ID
+                  WHERE 1 = 1`;
+      
+          if (dateFrom) {
+            sql += ` AND o.ORD_ORDER_DATE >= '${dateFrom}'`;
+          }
+          if (dateTo) {
+            sql += ` AND o.ORD_ORDER_DATE <= '${dateTo}'`;
+          }
+          if (customerOption) {
+            sql += ` AND c.CUS_ID = '${customerOption}'`; 
+          }
+      
+          sql += ` GROUP BY c.CUS_ID, c.CUS_FIRST_NAME `;
+      
+          if (stateOption == 1) {
+            sql += ` HAVING COUNT(o.ORD_IDENTIFIER) > 5 ORDER BY COUNT(o.ORD_IDENTIFIER) DESC`; 
+          }
+          break;
+      
+
+      
 
       // Agregar más casos según sea necesario
       default:
