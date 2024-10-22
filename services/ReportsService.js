@@ -122,6 +122,30 @@ class ReportsService {
       
 
 
+      case "Servicios":
+        sql = `SELECT d.SER_SERVICENAME AS 'SERVICIO', COUNT(a.SER_ID) AS 'VECES UTILIZADO'
+              FROM SDB_DATE a
+              INNER JOIN SDB_SERVICE d ON a.SER_ID = d.SER_ID
+              WHERE 1=1`; 
+
+        if (dateFrom && dateFrom !== "") {
+          sql += ` AND a.DAT_START >= '${dateFrom}'`;
+        }
+        if (dateTo && dateTo !== "") {
+          sql += ` AND a.DAT_END <= '${dateTo}'`;
+        }
+
+        sql += ` GROUP BY d.SER_SERVICENAME`;
+
+        if (stateOption === "servicios-mas-demandados") {
+          sql += ` ORDER BY COUNT(a.SER_ID) DESC`;
+        } else if (stateOption === "servicios-menos-demandados") {
+          sql += ` ORDER BY COUNT(a.SER_ID) ASC`;
+        }
+        sql += ` LIMIT 10`;
+
+        break;
+
       // Agregar más casos según sea necesario
       default:
         throw new Error("Tipo de reporte no soportado");
