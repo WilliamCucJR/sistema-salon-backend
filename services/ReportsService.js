@@ -135,12 +135,12 @@ class ReportsService {
 
         break;
       case "Clientes":
-          sql = `SELECT c.CUS_ID AS 'ID CLIENTE',
-                        CONCAT(c.CUS_FIRST_NAME, ' ', c.CUS_LAST_NAME) AS 'CLIENTE',
-                        COUNT(o.ORD_IDENTIFIER) AS 'NUMERO DE CITAS'
-                  FROM SDB_CUSTOMER c
-                  INNER JOIN SDB_ORDER o ON c.CUS_ID = o.CUS_ID
-                  WHERE 1 = 1`;
+          sql = `SELECT c.CUS_ID as "ID CLIENTE", 
+                    CONCAT(c.CUS_FIRST_NAME, ' ', c.CUS_LAST_NAME) AS "NOMBRE", 
+                    COUNT(o.CUS_ID) AS "TOTAL ORDENES"
+                FROM SDB_B.SDB_CUSTOMER c
+                LEFT JOIN SDB_B.SDB_ORDER o ON c.CUS_ID = o.CUS_ID
+                WHERE 1 = 1`;
       
           if (dateFrom) {
             sql += ` AND o.ORD_ORDER_DATE >= '${dateFrom}'`;
@@ -152,11 +152,15 @@ class ReportsService {
             sql += ` AND c.CUS_ID = '${customerOption}'`; 
           }
       
-          sql += ` GROUP BY c.CUS_ID, c.CUS_FIRST_NAME `;
+          sql += ` GROUP BY c.CUS_ID, c.CUS_FIRST_NAME, c.CUS_LAST_NAME `;
       
           if (stateOption == 1) {
-            sql += ` HAVING COUNT(o.ORD_IDENTIFIER) > 5 ORDER BY COUNT(o.ORD_IDENTIFIER) DESC`; 
+            sql += ` HAVING COUNT(o.ORD_IDENTIFIER) > 4 ORDER BY COUNT(o.ORD_IDENTIFIER) DESC`; 
           }
+          if (stateOption == 2) {
+            sql += ` HAVING COUNT(o.ORD_IDENTIFIER) = 0 ORDER BY COUNT(o.ORD_IDENTIFIER) DESC`; 
+          }
+
           break;
       
 
