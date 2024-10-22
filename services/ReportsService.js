@@ -49,7 +49,6 @@ class ReportsService {
           sql += ` AND a.EMP_ID = ${employeeOption}`;
         }
         break;
-
       case "Ventas":
         sql = `SELECT 	a.ORD_IDENTIFIER AS 'NO ORDEN',
                         DATE_FORMAT(a.ORD_ORDER_DATE, '%d-%m-%Y') AS FECHA,
@@ -80,6 +79,48 @@ class ReportsService {
           sql += ` AND a.PRO_ID = ${productOption}`;
         }
         break;
+        case "Productos":
+          sql = `SELECT d.PRO_ID AS "ID PRODUCTO",
+                        d.PRO_NAME AS "PRODUCTO",
+                        SUM(a.ORD_QUANTITY) AS "CANTIDAD VENDIDA",
+                        COUNT(a.ORD_IDENTIFIER) AS "NUMERO DE ORDENES",
+                        CASE
+                            WHEN SUM(a.ORD_QUANTITY) IS NULL THEN 'SIN VENTAS'
+                            WHEN SUM(a.ORD_QUANTITY) > 0 THEN 'VENDIDO'
+                            ELSE 'NO VENDIDO'
+                        END AS ESTADO
+                FROM SDB_ORDER a
+                INNER JOIN SDB_PRODUCT d ON d.PRO_ID = a.PRO_ID
+                WHERE 1 = 1`;
+      
+          if (dateFrom) {
+              sql += ` AND a.ORD_ORDER_DATE >= '${dateFrom}'`;
+          }
+          if (dateTo) {
+              sql += ` AND a.ORD_ORDER_DATE <= '${dateTo}'`;
+          }
+      
+          sql += ` GROUP BY d.PRO_ID, d.PRO_NAME`;
+      
+          if (stateOption == 1) {
+              sql += ` HAVING SUM(a.ORD_QUANTITY) > 0 ORDER BY SUM(a.ORD_QUANTITY) DESC`;
+          } else if (stateOption == 2) {
+              sql += ` HAVING (SUM(a.ORD_QUANTITY) < 3 OR SUM(a.ORD_QUANTITY) IS NULL) ORDER BY SUM(a.ORD_QUANTITY) ASC`;
+          } 
+          
+          else if (productOption) {
+              sql += ` AND d.PRO_ID = ${productOption}`;
+          }
+      
+          console.log(`Valor de stateOption: ${stateOption}`);
+          console.log(`Consulta SQL generada: ${sql}`);
+          break;
+
+        
+      
+
+      
+
 
       // Agregar más casos según sea necesario
       default:
@@ -93,5 +134,6 @@ class ReportsService {
     }
   }
 }
+
 
 module.exports = ReportsService;
