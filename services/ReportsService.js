@@ -61,7 +61,7 @@ class ReportsService {
                             ELSE 'PENDIENTE DE PAGO'
                         END AS ESTADO
                 FROM SDB_ORDER a
-                LEFT JOIN SDB_CUSTOMER c ON c.USE_ID = a.CUS_ID
+                LEFT JOIN SDB_CUSTOMER c ON c.CUS_ID = a.CUS_ID
                 LEFT JOIN SDB_PRODUCT d ON d.PRO_ID = a.PRO_ID
                 WHERE a.SER_ID IS NULL
                 AND a.ORD_STATUS = 1`;
