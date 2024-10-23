@@ -37,10 +37,10 @@ class ReportsService {
                 WHERE 1 = 1`;
 
         if (dateFrom) {
-          sql += ` AND a.DAT_START >= '${dateFrom}'`;
+          sql += ` AND a.DAT_START >= '${dateFrom} 00:00:00'`;
         }
         if (dateTo) {
-          sql += ` AND a.DAT_END <= '${dateTo}'`;
+          sql += ` AND a.DAT_END <= '${dateTo} 23:59:59'`;
         }
         if (stateOption) {
           sql += ` AND a.DAT_STATUS = ${stateOption}`;
@@ -67,10 +67,10 @@ class ReportsService {
                 AND a.ORD_STATUS = 1`;
 
         if (dateFrom) {
-          sql += ` AND a.ORD_ORDER_DATE >= '${dateFrom}'`;
+          sql += ` AND a.ORD_ORDER_DATE >= '${dateFrom} 00:00:00'`;
         }
         if (dateTo) {
-          sql += ` AND a.ORD_ORDER_DATE <= '${dateTo}'`;
+          sql += ` AND a.ORD_ORDER_DATE <= '${dateTo} 23:59:59'`;
         }
         if (customerOption) {
           sql += ` AND a.CUS_ID = ${customerOption}`;
@@ -93,10 +93,10 @@ class ReportsService {
                 WHERE 1 = 1`;
       
           if (dateFrom) {
-              sql += ` AND a.ORD_ORDER_DATE >= '${dateFrom}'`;
+              sql += ` AND a.ORD_ORDER_DATE >= '${dateFrom} 00:00:00'`;
           }
           if (dateTo) {
-              sql += ` AND a.ORD_ORDER_DATE <= '${dateTo}'`;
+              sql += ` AND a.ORD_ORDER_DATE <= '${dateTo} 23:59:59'`;
           }
           if (productOption) {
               sql += ` AND d.PRO_ID = ${productOption}`;
@@ -118,10 +118,10 @@ class ReportsService {
               WHERE 1=1`; 
 
         if (dateFrom && dateFrom !== "") {
-          sql += ` AND a.DAT_START >= '${dateFrom}'`;
+          sql += ` AND a.DAT_START >= '${dateFrom} 00:00:00'`;
         }
         if (dateTo && dateTo !== "") {
-          sql += ` AND a.DAT_END <= '${dateTo}'`;
+          sql += ` AND a.DAT_END <= '${dateTo} 23:59:59'`;
         }
 
         sql += ` GROUP BY d.SER_SERVICENAME`;
@@ -138,15 +138,15 @@ class ReportsService {
           sql = `SELECT c.CUS_ID as "ID CLIENTE", 
                     CONCAT(c.CUS_FIRST_NAME, ' ', c.CUS_LAST_NAME) AS "NOMBRE", 
                     COUNT(o.CUS_ID) AS "TOTAL ORDENES"
-                FROM SDB_B.SDB_CUSTOMER c
-                LEFT JOIN SDB_B.SDB_ORDER o ON c.CUS_ID = o.CUS_ID
+                FROM SDB_CUSTOMER c
+                LEFT JOIN SDB_ORDER o ON c.CUS_ID = o.CUS_ID
                 WHERE 1 = 1`;
       
           if (dateFrom) {
-            sql += ` AND o.ORD_ORDER_DATE >= '${dateFrom}'`;
+            sql += ` AND o.ORD_ORDER_DATE >= '${dateFrom} 00:00:00'`;
           }
           if (dateTo) {
-            sql += ` AND o.ORD_ORDER_DATE <= '${dateTo}'`;
+            sql += ` AND o.ORD_ORDER_DATE <= '${dateTo} 23:59:59'`;
           }
           if (customerOption) {
             sql += ` AND c.CUS_ID = '${customerOption}'`; 
@@ -155,12 +155,11 @@ class ReportsService {
           sql += ` GROUP BY c.CUS_ID, c.CUS_FIRST_NAME, c.CUS_LAST_NAME `;
       
           if (stateOption == 1) {
-            sql += ` HAVING COUNT(o.ORD_IDENTIFIER) > 4 ORDER BY COUNT(o.ORD_IDENTIFIER) DESC`; 
+            sql += ` HAVING COUNT(o.ORD_IDENTIFIER) >= 5 ORDER BY COUNT(o.ORD_IDENTIFIER) DESC`; 
           }
           if (stateOption == 2) {
-            sql += ` HAVING COUNT(o.ORD_IDENTIFIER) = 0 ORDER BY COUNT(o.ORD_IDENTIFIER) DESC`; 
+            sql += ` HAVING COUNT(o.ORD_IDENTIFIER) < 5 ORDER BY COUNT(o.ORD_IDENTIFIER) DESC`; 
           }
-
           break;
       
 
