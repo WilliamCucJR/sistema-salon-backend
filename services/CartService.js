@@ -20,7 +20,8 @@ class CartService {
                   LEFT JOIN SDB_PRODUCT p ON p.PRO_ID = a.PRO_ID
                   LEFT JOIN SDB_SERVICE s ON s.SER_ID = a.SER_ID
                   WHERE a.CUS_ID = ?
-                  AND a.ORD_STATUS = 0`;
+                  AND a.ORD_STATUS = 0
+                  AND a.ORD_TOTAL > 0`;
     const values = [id];
     try {
       return await this.db.query(sql, values);
