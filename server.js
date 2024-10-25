@@ -16,7 +16,12 @@ const reportsRoutes = require("./routes/reportsRoutes");
 const app = express();
 const port = 3000;
 
-app.use(cors());
+const corsOptions = {
+  origin: "https://sistema-salon.vercel.app",
+  optionsSuccessStatus: 200,
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 app.use("/api", supplierRoutes);
