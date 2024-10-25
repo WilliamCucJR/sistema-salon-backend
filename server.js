@@ -16,12 +16,12 @@ const reportsRoutes = require("./routes/reportsRoutes");
 const app = express();
 const port = 3000;
 
-const corsOptions = {
+/* const corsOptions = {
   origin: "*",
   optionsSuccessStatus: 200,
 };
 
-app.use(cors(corsOptions));
+app.use(cors(corsOptions)); */
 app.use(express.json());
 
 app.use("/api", supplierRoutes);
