@@ -17,7 +17,7 @@ const app = express();
 const port = 3000;
 
 const corsOptions = {
-  origin: "https://sistema-salon.vercel.app",
+  origin: "*",
   optionsSuccessStatus: 200,
 };
 
