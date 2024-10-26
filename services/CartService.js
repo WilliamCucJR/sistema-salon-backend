@@ -31,7 +31,7 @@ class CartService {
   }
 
   async getTotalByCustomerId(id) {
-    const sql = `SELECT SUM(ORD_TOTAL) AS TOTAL, SUM(ORD_QUANTITY) AS CANTIDAD FROM SDB_ORDER WHERE CUS_ID = ? AND ORD_STATUS = 0`;
+    const sql = `SELECT SUM(ORD_TOTAL) AS TOTAL, SUM(ORD_QUANTITY) AS CANTIDAD FROM SDB_ORDER WHERE CUS_ID = ? AND ORD_STATUS = 0 AND ORD_TOTAL > 0`;
     const values = [id];
     try {
       const result = await this.db.query(sql, values);
