@@ -12,18 +12,16 @@ const loginRoutes = require("./routes/loginRoutes");
 const dateRoutes = require("./routes/dateRoutes");
 const cartRoutes = require("./routes/cartRoutes");
 const reportsRoutes = require("./routes/reportsRoutes");
-const ordersRoutes = require("./routes/orderRoutes");
 
 const app = express();
 const port = 3000;
 
-/* const corsOptions = {
+const corsOptions = {
   origin: "*",
   optionsSuccessStatus: 200,
 };
 
- */
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
 
 app.use("/api", supplierRoutes);
@@ -37,7 +35,6 @@ app.use("/api", loginRoutes);
 app.use("/api", dateRoutes);
 app.use("/api", cartRoutes);
 app.use("/api", reportsRoutes);
-app.use("/api", ordersRoutes);
 
 app.get("/", (req, res) => {
   res.send("¡Hola, mundo!");
