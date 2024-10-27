@@ -20,8 +20,8 @@ const port = 3000;
   origin: "*",
   optionsSuccessStatus: 200,
 };
-
-app.use(cors(corsOptions)); */
+ */
+app.use(cors());
 app.use(express.json());
 
 app.use("/api", supplierRoutes);
